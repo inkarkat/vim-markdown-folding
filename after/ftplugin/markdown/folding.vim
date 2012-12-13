@@ -42,11 +42,11 @@ endfunction
 function! HeadingDepth(lnum)
   let level=0
   let thisline = getline(a:lnum)
-  if thisline =~ '^#\+\s\+'
-    let hashCount = len(matchstr(thisline, '^#\{1,6}'))
-    if hashCount > 0
-      let level = hashCount
-    endif
+  let hashCount = len(matchstr(thisline, '^#\{1,6}'))
+  if hashCount > 0
+    let level = hashCount
+  elseif thisline =~ '^\([-_*]\) *\1 *\1\%(\1\| \)*$' && (thisline !~ '^-\{3,} *$' || getline(a:lnum - 1) =~ '^\s*$')
+    let level = 7
   else
     if thisline != ''
       let nextline = getline(a:lnum + 1)
